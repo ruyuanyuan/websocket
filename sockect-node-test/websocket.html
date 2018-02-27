@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>websocket</title>
+</head>
+<style>
+    *{
+        padding:0;
+        margin:0;
+        list-style: none;
+        box-sizing: border-box;
+    }
+    .chat-box{
+        width:400px;
+        height:600px;
+        margin:40px auto;
+        position: relative;
+        border:1px solid #ddd;
+
+    }
+    .chat-title{
+        width:100%;
+        height:40px;
+        line-height: 40px;
+        background: rgb(137, 202, 255);
+        text-align: center;
+        color:#fff;
+        text-align: center;
+        font-size: 18px;
+        
+       
+    }
+    #chat-content{
+        overflow-y:auto;
+        height:40px;
+        height:500px;
+        margin-top:10px;
+        margin-bottom: 10px;
+    }
+    .send-chat{
+        width:100%;
+        position: relative;
+        border:1px solid rgb(137, 202, 255);
+        box-sizing: border-box;
+    }
+    #sendtext{
+        display: inline-block;
+        width:100%;
+        height:40px;
+        border:0;
+        outline: none;
+        padding:6px;
+        padding-right:66px;
+    }
+    #send-chat-btn{
+        position:absolute;
+        top:10px;
+        right:10px;
+        width:60px;
+    }
+</style>
+<body>
+    <div class='chat-box'>
+        <h1 class='chat-title'>聊天者</h1>
+        <div id='chat-content'></div>
+        <div class='send-chat'>
+            <input type="text" id='sendtext'>
+            <button id='send-chat-btn'>发送</button>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var websocket =new WebSocket("ws://localhost:3000/")
+
+    websocket.onopen=function(){
+        document.getElementById('send-chat-btn').onclick=function(){
+            var txt= document.getElementById('sendtext').value;
+            if(txt){
+                websocket.send(txt)
+            }
+        }     
+    }
+    websocket.onclose=function(){
+    
+    }
+    websocket.onmessage=function(e){
+        showmassage(e.data)
+    }
+
+    function showmassage(str){
+        var div=document.createElement('div')
+        div.innerHTML=str;
+        document.getElementById('chat-content').appendChild(div)
+    }
+
+</script>
